@@ -25,7 +25,7 @@ public class Test {
     }
 
     public void setTestId(Long id) {
-        this.testId = testId;
+        this.testId = id;
     }
     public String getName() {
         return name;
