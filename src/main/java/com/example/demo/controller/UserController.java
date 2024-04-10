@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.service.JWTUtil;
 import com.example.demo.DTOs.LoginRequest;
 import com.example.demo.entity.User;
+import com.example.demo.service.PasswordHasher;
 import com.example.demo.service.TokenService;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -22,6 +23,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private PasswordHasher passwordHasher;
     // API endpoint for user login
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
@@ -40,7 +43,7 @@ public class UserController {
         }
 
         // Check if the password provided matches the stored password for the user
-        if(!user.getPassword().equals(password)) {
+        if(!passwordHasher.checkPassword(password, user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password.");
         }
 
