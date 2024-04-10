@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
 
@@ -16,8 +18,9 @@ public class Test {
     private String description;
 
     // relationship with questions
-    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL)
-    private List<Question> questions;
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private Set<Question> questions;
 
     // getters and setters
     public Long getTestId() {
