@@ -104,7 +104,11 @@ public class UserService {
                     throw new IllegalArgumentException("Invalid role value: " + inputRole);
                 }
             }
-
+            if (updatedUser.getIsActive() != null) {
+                existingUser.setIsActive(updatedUser.getIsActive());
+            } else  {
+                existingUser.setIsActive(existingUser.getIsActive());
+            }
             // Save the updated user
             userRepository.save(existingUser);
         } else {
@@ -116,7 +120,8 @@ public class UserService {
     public void deleteUser(Long id) {
         User existingUser = userRepository.findByUserId(id);
         if (existingUser != null) {
-            userRepository.delete(existingUser);
+            existingUser.setIsActive(false);
+            userRepository.save(existingUser);
         } else {
             throw new IllegalArgumentException("User is not exist in database");
         }
