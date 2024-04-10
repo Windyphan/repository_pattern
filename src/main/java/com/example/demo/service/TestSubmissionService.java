@@ -74,7 +74,6 @@ public class TestSubmissionService {
         }
         submission.setSubmissionTime(LocalDateTime.now());
         testSubmissionRepository.save(submission);
-        return submission;
     }
 
     public List<TestSubmissionDTO> getTestResults(Long studentId) {
