@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,8 +18,9 @@ public class TestSubmission {
     private Long studentId;
     @Column(name = "test_id")
     private Long testId;
-    @OneToMany(mappedBy = "testSubmission", cascade = CascadeType.ALL)
-    private List<QuestionSubmission> questionsSubmissions;
+    @OneToMany(mappedBy = "testSubmission", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<QuestionSubmission> questionSubmissions;
     @Column(name = "time_submission")
     private LocalDateTime submissionTime;
 
@@ -59,11 +62,11 @@ public class TestSubmission {
 
 
     public List<QuestionSubmission> getQuestionSubmissions() {
-        return questionsSubmissions;
+        return questionSubmissions;
     }
 
-    public void setQuestionSubmissions(List<QuestionSubmission> questionsSubmissions) {
-        this.questionsSubmissions = questionsSubmissions;
+    public void setQuestionSubmissions(List<QuestionSubmission> questionSubmissions) {
+        this.questionSubmissions = questionSubmissions;
     }
 
     // Getters and Setters
