@@ -21,6 +21,9 @@ public class TestSubmissionService {
     private TestRepository testRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private TestSubmissionRepository testSubmissionRepository;
 
     public void submitTest(TestSubmissionDTO submissionDTO) {
