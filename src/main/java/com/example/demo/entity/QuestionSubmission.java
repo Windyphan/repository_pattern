@@ -6,8 +6,11 @@ import jakarta.persistence.*;
 public class QuestionSubmission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "question_submission_id")
+    private Long questionSubmissionId;
+
+    @Column(name = "question_id")
+    private Long questionId;
     // relationship with answers
 
     @Column(name = "answer")
@@ -17,7 +20,7 @@ public class QuestionSubmission {
     private Boolean isAnswerCorrect;
 
     @ManyToOne
-    @JoinColumn(name = "test_id")
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private TestSubmission testSubmission;
 
     public Long getQuestionSubmissionId() {
@@ -29,11 +32,11 @@ public class QuestionSubmission {
     }
 
     public Long getQuestionId() {
-        return id;
+        return questionId;
     }
 
-    public void setQuestionId(Long id) {
-        this.id = id;
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
     }
 
     public String getAnswer() {
