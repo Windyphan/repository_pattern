@@ -75,9 +75,8 @@ public class AdminUserController {
             authenticationService.authenticateToken(token);
             userService.updateUser(id, user);
         } catch(IllegalArgumentException ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
-
     }
 
     // Delete a user (Teacher)
