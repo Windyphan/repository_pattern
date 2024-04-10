@@ -15,9 +15,9 @@ public class Question {
     private String content;
 
     // relationship with answers
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<Answer> answers;
-
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private Set<Answer> answers;
     @ManyToOne
     @JoinColumn(name = "test_id")
     private Test test;
@@ -38,7 +38,7 @@ public class Question {
         this.content = content;
     }
 
-    public List<Answer> getAnswers() {
+    public Set<Answer> getAnswers() {
         return answers;
     }
 
