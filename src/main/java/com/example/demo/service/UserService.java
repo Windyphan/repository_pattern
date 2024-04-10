@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.example.demo.entity.UserRole.TEACHER;
+
 @Service
 public class UserService {
     @Autowired
@@ -30,22 +32,28 @@ public class UserService {
                 throw new IllegalArgumentException("User password is required");
             }
 
-        if (user.getEmail() == null || user.getEmail().isEmpty()) {
-            throw new IllegalArgumentException("User email is required");
+            if (user.getEmail() == null || user.getEmail().isEmpty()) {
+                throw new IllegalArgumentException("User email is required");
+            }
         }
-        if (user.getRole().equals(AdminUserController.UserRole.TEACHER)) {
-            user.setEmail("teacher@example.com");
-            user.setPassword("12345678");
+
+        if (user.getName() == null || user.getName().isEmpty()) {
+            throw new IllegalArgumentException("User name is required");
         }
+
         if (user.getUserId() != null) {
             User existingUser = userRepository.findByUserId(user.getUserId());
             if (existingUser != null) {
-                throw new IllegalArgumentException("User already existed");
+                throw new IllegalArgumentException("User id already existed");
             }
         }
+        User existingUserEmail = userRepository.findByEmail(user.getEmail());
+        if (existingUserEmail != null) {
+            throw new IllegalArgumentException("User email must be unique");
+        }
+        user.setPassword(passwordHasher.hashPassword(user.getPassword()));
+        user.setIsActive(true);
         userRepository.save(user);
-
-
     }
 
     public List<User> getAllUsers() {
@@ -88,7 +96,12 @@ public class UserService {
             }
 
             if (updatedUser.getEmail() != null) {
-                existingUser.setEmail(updatedUser.getEmail());
+                User user = userRepository.findByEmail(updatedUser.getEmail());
+                if (user == null || user.getEmail().equals(existingUser.getEmail())){
+                    existingUser.setEmail(updatedUser.getEmail());
+                } else {
+                    throw new IllegalArgumentException("Email must be unique");
+                }
             }
 
             if (updatedUser.getRole() != null) {
