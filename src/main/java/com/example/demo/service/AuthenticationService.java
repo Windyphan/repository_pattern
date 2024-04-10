@@ -12,7 +12,7 @@ public class AuthenticationService {
     private JWTUtil jwtUtil;
     public boolean isUserAuthenticated(String token){
         // Validate the JWT token
-        return !jwtUtil.validateToken(token);
+        return jwtUtil.validateToken(token);
     }
     public void authenticateToken(String token){
         // Check if the Authorization header containing the JWT token is present
