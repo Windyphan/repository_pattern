@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private JWTUtil jwtUtil;
-
     @Autowired
     private TokenService tokenService;
-
     @Autowired
     private UserService userService;
     @Autowired

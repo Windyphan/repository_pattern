@@ -12,10 +12,8 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "question_id")
     private Long id;
-
     @Column (name = "content")
     private String content;
-
     // relationship with answers
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
