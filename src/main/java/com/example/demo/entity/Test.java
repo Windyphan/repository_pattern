@@ -53,4 +53,13 @@ public class Test {
     public void setQuestions(Set<Question> questions) {
         this.questions = questions;
     }
+    @Override
+    public String toString() {
+        return "Test{" +
+                "testId=" + testId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", questions=" + questions +
+                '}';
+    }
 }
