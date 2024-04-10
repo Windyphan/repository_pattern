@@ -1,4 +1,5 @@
 package com.example.demo.service;
+import com.example.demo.DTOs.TestDTO;
 import com.example.demo.entity.Answer;
 import com.example.demo.entity.Question;
 import com.example.demo.entity.Test;
@@ -6,6 +7,7 @@ import com.example.demo.repository.TestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -65,6 +67,14 @@ public class TestService {
                 throw new IllegalArgumentException("Test id already existed");
             }
         }
+        // Set the relationship between Test and Question entities
+        for(Question question : test.getQuestions()) {
+            question.setTest(test); // Set the Test entity in the Question entity
+            for(Answer answer : question.getAnswers()) {
+                answer.setQuestion(question); // Set the Question entity in the Answer entity
+            }
+        }
+
         testRepository.save(test);
     }
 
