@@ -20,6 +20,14 @@ public class QuestionSubmission {
     @JoinColumn(name = "test_id")
     private TestSubmission testSubmission;
 
+    public Long getQuestionSubmissionId() {
+        return questionSubmissionId;
+    }
+
+    public void setQuestionSubmissionId(Long id) {
+        this.questionSubmissionId = questionSubmissionId;
+    }
+
     public Long getQuestionId() {
         return id;
     }
@@ -43,5 +51,22 @@ public class QuestionSubmission {
     public void setIsAnswerCorrect(Boolean answerCorrect) {
         isAnswerCorrect = answerCorrect;
     }
+
+    public Boolean getAnswerCorrect() {
+        return isAnswerCorrect;
+    }
+
+    public void setAnswerCorrect(Boolean answerCorrect) {
+        isAnswerCorrect = answerCorrect;
+    }
+
+    public TestSubmission getTestSubmission() {
+        return testSubmission;
+    }
+
+    public void setTestSubmission(TestSubmission testSubmission) {
+        this.testSubmission = testSubmission;
+    }
+
 
 }
