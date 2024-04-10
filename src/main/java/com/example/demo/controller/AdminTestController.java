@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTOs.TestDTO;
 import com.example.demo.entity.Test;
 import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.JWTUtil;
@@ -28,13 +29,13 @@ public class AdminTestController {
     // API endpoint to create a new test
     @PostMapping("/create")
     @PreAuthorize("hasRole(T(UserRole).TEACHER)")
-    public Test createTest(
+    public TestDTO createTest(
             @RequestHeader("Authorization") String token,
-            @RequestBody Test test) {
+            @RequestBody TestDTO testDTO) {
         try {
             authenticationService.authenticateToken(token);
-            testService.saveTest(test);
-            return test;
+            testService.createTest(testDTO);
+            return testDTO;
         } catch (IllegalArgumentException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,ex.getMessage());
         }
