@@ -14,33 +14,42 @@ public class TestService {
     @Autowired
     private TestRepository testRepository;
 
-    public List<Test> getAllTests() {
+    public List<TestDTO> getAllTests() {
         List<Test> tests = testRepository.findAll();
         if (tests == null) {
             throw new IllegalArgumentException("Tests is not existed in database");
         }
-        return tests;
+        List<TestDTO> testDTOs = new ArrayList<>();
+        for (Test test : tests) {
+            TestDTO testDTO = new TestDTO();
+            testDTO = testDTO.mapTestToTestDTO(test);
+            testDTOs.add(testDTO);
+        }
+        return testDTOs;
     }
 
-    public Test getTest(Long id) {
+    public TestDTO getTest(Long id) {
         Test test = testRepository.findByTestId(id);
         if (test == null) {
             throw new IllegalArgumentException("Test is not existed in database");
         }
-        return test;
+        TestDTO testDTO = new TestDTO();
+        testDTO = testDTO.mapTestToTestDTO(test);
+        return testDTO;
     }
 
-    public void saveTest(Test test) {
-        if (test.getName() == null || test.getName().isEmpty()) {
+    public void createTest(TestDTO testDTO) {
+        if (testDTO.getName() == null || testDTO.getName().isEmpty()) {
             throw new IllegalArgumentException("Test must have at least a name");
         }
-        if(test.getDescription() == null || test.getDescription().isEmpty()) {
+        if(testDTO.getDescription() == null || testDTO.getDescription().isEmpty()) {
             throw new IllegalArgumentException("Test must have at least a description");
         }
-        if (test.getQuestions() == null ||test.getQuestions().isEmpty()) {
+        if (testDTO.getQuestions() == null || testDTO.getQuestions().isEmpty()) {
             throw new IllegalArgumentException("Test must have at least a question");
         }
 
+        Test test = testDTO.mapTestDTOToTest(testDTO);
 
         // Validate each question in the test
         boolean allQuestionsValid = test.getQuestions().stream()
