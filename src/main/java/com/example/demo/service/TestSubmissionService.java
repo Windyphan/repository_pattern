@@ -53,6 +53,7 @@ public class TestSubmissionService {
 
         // Proceed with checking the correctness of the answers
         for (QuestionSubmission questionSubmission : submission.getQuestionSubmissions()) {
+            questionSubmission.setTestSubmission(submission);
             // Retrieve the corresponding Question and compare answers
             Question question = test.getQuestions().stream()
                     .filter(q -> q.getId().equals(questionSubmission.getQuestionId()))
@@ -71,6 +72,7 @@ public class TestSubmissionService {
                 }
             }
         }
+        submission.setSubmissionTime(LocalDateTime.now());
         testSubmissionRepository.save(submission);
         return submission;
     }
