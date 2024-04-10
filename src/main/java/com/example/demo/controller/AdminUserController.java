@@ -46,8 +46,12 @@ public class AdminUserController {
     public List<User> getAllUsers(
             @RequestHeader("Authorization") String token
     ) {
-        authenticationService.authenticateToken(token);
-        return userService.getAllUsers();
+        try {
+            authenticationService.authenticateToken(token);
+            return userService.getAllUsers();
+        } catch(IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,ex.getMessage());
+        }
     }
 
     // Get all users (Teachers and Students)
