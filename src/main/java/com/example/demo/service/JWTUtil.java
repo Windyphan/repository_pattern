@@ -39,7 +39,7 @@ public class JWTUtil {
         try {
             Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(jwtToken).getBody();
             Date expirationDate = claims.getExpiration();
-            return !expirationDate.before(new Date()); // Check if token is not expired
+            return expirationDate.before(new Date()); // Check if token is not expired
         } catch (JwtException | IllegalArgumentException e) {
             // Exception handling for invalid tokens
             return false;
