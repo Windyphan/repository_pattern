@@ -69,4 +69,12 @@ public class User {
         this.role = role;
     }
 
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean active) {
+        isActive = active;
+    }
+
 }
