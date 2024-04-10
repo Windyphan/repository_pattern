@@ -18,9 +18,10 @@ public class TestSubmissionService {
 
     @Autowired
     private TestSubmissionRepository testSubmissionRepository;
-    public TestSubmission submitTest(TestSubmission submission) {
+
+    public void submitTest(TestSubmissionDTO submissionDTO) {
         // Process the submission and save the test result
-        if (submission == null) {
+        if (submissionDTO == null) {
             throw new IllegalArgumentException("No data in submission");
         }
         Test test = testRepository.findByTestId(submission.getId());
@@ -28,6 +29,7 @@ public class TestSubmissionService {
         if (test == null) {
             throw new IllegalArgumentException("Illegal test id in test submission");
         }
+        TestSubmission submission = submissionDTO.mapTestSubmissionDTOToTestSubmission(submissionDTO);
         // Create a set of question IDs from the test
         Set<Long> testQuestionIds = test.getQuestions().stream()
                 .map(Question::getId)
@@ -66,8 +68,18 @@ public class TestSubmissionService {
         return submission;
     }
 
-    public List<TestSubmission> getTestResults(Long studentId) {
+    public List<TestSubmissionDTO> getTestResults(Long studentId) {
         // Query the database to get the test results for the specified student
-        return testSubmissionRepository.findByStudentId(studentId); // Return the fetched test results
+        List<TestSubmission> submissions = testSubmissionRepository.findByStudentId(studentId);
+        if (submissions == null) {
+            throw new IllegalArgumentException("No data in submission");
+        }
+        List<TestSubmissionDTO> submissionDTOS = new ArrayList<>();
+        for (TestSubmission submission : submissions) {
+            TestSubmissionDTO submissionDTO = new TestSubmissionDTO();
+            submissionDTO = submissionDTO.mapTestSubmissionToTestSubmissionDTO(submission);
+            submissionDTOS.add(submissionDTO);
+        }
+        return submissionDTOS; // Return the fetched test results
     }
 }
