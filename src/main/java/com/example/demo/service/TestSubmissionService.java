@@ -24,7 +24,14 @@ public class TestSubmissionService {
         if (submissionDTO == null) {
             throw new IllegalArgumentException("No data in submission");
         }
-        Test test = testRepository.findByTestId(submission.getId());
+        User student = userRepository.findByUserId(submissionDTO.getStudentId());
+        if (student == null) {
+            throw new IllegalArgumentException("User id not existed");
+        }
+        if (student.getRole() == UserRole.TEACHER) {
+            throw new IllegalArgumentException("User role is forbidden");
+        }
+        Test test = testRepository.findTestChildEntitiesByTestId(submissionDTO.getTestId());
 
         if (test == null) {
             throw new IllegalArgumentException("Illegal test id in test submission");
