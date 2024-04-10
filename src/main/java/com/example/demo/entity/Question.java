@@ -44,7 +44,15 @@ public class Question {
         return answers;
     }
 
-    public void setAnswers(List<Answer> answers) {
+    public Test getTest() {
+        return test;
+    }
+
+    public void setTest(Test test) {
+        this.test = test;
+    }
+
+    public void setAnswers(Set<Answer> answers) {
         this.answers = answers;
     }
 // getters and setters
