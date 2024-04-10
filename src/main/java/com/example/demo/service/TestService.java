@@ -59,9 +59,11 @@ public class TestService {
         if (!allQuestionsValid) {
             throw new IllegalArgumentException("Each question must have at least one answer and one correct answer");
         }
-        Test existingTest = testRepository.findByTestId(test.getTestId());
-        if (existingTest != null) {
-            throw new IllegalArgumentException("Test already existed");
+        if (test.getTestId() != null) {
+            Test existingTest = testRepository.findByTestId(test.getTestId());
+            if (existingTest != null) {
+                throw new IllegalArgumentException("Test id already existed");
+            }
         }
         testRepository.save(test);
     }
