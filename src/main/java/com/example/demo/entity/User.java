@@ -17,6 +17,8 @@ public class User {
     private String password;
     @Column(name = "role")
     private UserRole role;
+    @Column(name = "is_active")
+    private Boolean isActive;
     public User(String email, String password, UserRole role) {
         this.email = email;
         this.password = password;
