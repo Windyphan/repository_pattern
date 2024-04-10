@@ -17,7 +17,7 @@ public class Answer {
     private boolean correct;
 
     @ManyToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "question_id", referencedColumnName = "question_id")
     private Question question;
 
     // getters and setters
