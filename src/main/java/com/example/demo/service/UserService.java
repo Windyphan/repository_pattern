@@ -16,18 +16,19 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordHasher passwordHasher;
     public void createUser(User user) {
         if (user.getRole() == null) {
             throw new IllegalArgumentException("User role is required");
         }
-
-        if (user.getName() == null || user.getName().isEmpty()) {
-            throw new IllegalArgumentException("User name is required");
-        }
-
-        if (user.getPassword() == null || user.getPassword().isEmpty()) {
-            throw new IllegalArgumentException("User password is required");
-        }
+        if (user.getRole().equals(AdminUserController.UserRole.valueOf(String.valueOf(TEACHER)))) {
+            user.setEmail("teacher@example.com");
+            user.setPassword(passwordHasher.hashPassword("12345678"));
+        } else {
+            if (user.getPassword() == null || user.getPassword().isEmpty()) {
+                throw new IllegalArgumentException("User password is required");
+            }
 
         if (user.getEmail() == null || user.getEmail().isEmpty()) {
             throw new IllegalArgumentException("User email is required");
@@ -83,7 +84,7 @@ public class UserService {
             }
 
             if (updatedUser.getPassword() != null) {
-                existingUser.setPassword(updatedUser.getPassword());
+                existingUser.setPassword(passwordHasher.hashPassword(updatedUser.getPassword()));
             }
 
             if (updatedUser.getEmail() != null) {
