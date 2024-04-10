@@ -21,7 +21,7 @@ public class Question {
     @Fetch(value = FetchMode.SUBSELECT)
     private Set<Answer> answers;
     @ManyToOne
-    @JoinColumn(name = "test_id")
+    @JoinColumn(name = "test_id", referencedColumnName = "test_id")
     private Test test;
 
     public Long getId() {
