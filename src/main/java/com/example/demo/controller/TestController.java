@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Test;
+import com.example.demo.DTOs.TestDTO;
 import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.JWTUtil;
 import com.example.demo.service.TestService;
@@ -25,25 +25,25 @@ public class TestController {
 
         // API endpoint to get a list of tests
         @GetMapping("/find")
-        public List<Test> getAllTests(
+        public List<TestDTO> getAllTests(
                 @RequestHeader("Authorization") String token) {
             try {
                 authenticationService.authenticateToken(token);
-                List<Test> tests = testService.getAllTests();
-                return tests;
+                List<TestDTO> testDTOs = testService.getAllTests();
+                return testDTOs;
             } catch(IllegalArgumentException ex) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,ex.getMessage());
             }
         }
 
         @GetMapping("/find/{id}")
-        public Test getTest(
+        public TestDTO getTest(
                 @PathVariable Long id,
                 @RequestHeader("Authorization") String token) {
             try {
                 authenticationService.authenticateToken(token);
-                Test test = testService.getTest(id);
-                return test;
+                TestDTO testDTO = testService.getTest(id);
+                return testDTO;
             } catch(IllegalArgumentException ex) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,ex.getMessage());
             }
