@@ -47,6 +47,11 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password.");
         }
 
+        // Check if the user is active or not
+        if(!user.getIsActive()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User is not active");
+        }
+
         // At this point, the user has successfully authenticated
         String jwtToken = jwtUtil.generateToken(user);
         //Set the cookie
