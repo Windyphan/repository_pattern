@@ -103,11 +103,10 @@ public class TestService {
 
     public void deleteTest(Long id) {
         Test existingTest = testRepository.findByTestId(id);
-        if (existingTest != null) {
-            testRepository.delete(existingTest);
-        } else {
+        if (existingTest == null) {
             throw new IllegalArgumentException("Test not existing");
         }
+        testRepository.delete(existingTest);
     }
 
 }
