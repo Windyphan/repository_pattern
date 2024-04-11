@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.controller.AdminUserController;
+import com.example.demo.DTOs.UserDTO;
 import com.example.demo.entity.User;
 import com.example.demo.entity.UserRole;
 import com.example.demo.repository.UserRepository;
@@ -20,56 +20,65 @@ public class UserService {
 
     @Autowired
     private PasswordHasher passwordHasher;
-    public void createUser(User user) {
-        if (user.getRole() == null) {
+    public void createUser(UserDTO userDTO) {
+        if (userDTO.getRole() == null) {
             throw new IllegalArgumentException("User role is required");
         }
-        if (user.getRole().equals(AdminUserController.UserRole.valueOf(String.valueOf(TEACHER)))) {
-            user.setEmail("teacher@example.com");
-            user.setPassword(passwordHasher.hashPassword("12345678"));
+        if (userDTO.getRole().equals(UserRole.valueOf(String.valueOf(TEACHER)))) {
+            userDTO.setEmail("teacher@example.com");
+            userDTO.setPassword(passwordHasher.hashPassword("12345678"));
         } else {
-            if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
                 throw new IllegalArgumentException("User password is required");
             }
 
-            if (user.getEmail() == null || user.getEmail().isEmpty()) {
+            if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
                 throw new IllegalArgumentException("User email is required");
             }
         }
 
-        if (user.getName() == null || user.getName().isEmpty()) {
+        if (userDTO.getName() == null || userDTO.getName().isEmpty()) {
             throw new IllegalArgumentException("User name is required");
         }
 
-        if (user.getUserId() != null) {
-            User existingUser = userRepository.findByUserId(user.getUserId());
+        if (userDTO.getUserId() != null) {
+            User existingUser = userRepository.findByUserId(userDTO.getUserId());
             if (existingUser != null) {
                 throw new IllegalArgumentException("User id already existed");
             }
         }
-        User existingUserEmail = userRepository.findByEmail(user.getEmail());
+        User existingUserEmail = userRepository.findByEmail(userDTO.getEmail());
         if (existingUserEmail != null) {
             throw new IllegalArgumentException("User email must be unique");
         }
-        user.setPassword(passwordHasher.hashPassword(user.getPassword()));
-        user.setIsActive(true);
-        userRepository.save(user);
+        userDTO.setPassword(passwordHasher.hashPassword(userDTO.getPassword()));
+        userDTO.setIsActive(true);
+        User newUser = userDTO.mapUserDTOToUser(userDTO);
+        userRepository.save(newUser);
     }
 
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
         if (users == null) {
             return new ArrayList<>();
         }
-        return users;
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for (User user : users) {
+            UserDTO userDTO = new UserDTO();
+            userDTO = userDTO.mapUserToUserDTO(user);
+            userDTOS.add(userDTO);
+        }
+        return userDTOS;
     }
 
-    public User findUser(Long id) {
+    public UserDTO findUser(Long id) {
         User user = userRepository.findByUserId(id);
         if (user == null) {
             throw new IllegalArgumentException("User not found");
         }
-        return user;
+        UserDTO userDTO = new UserDTO();
+        userDTO = userDTO.mapUserToUserDTO(user);
+        return userDTO;
     }
 
     public User findUserByEmail(String email) {

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTOs.UserDTO;
 import com.example.demo.entity.User;
 import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.JWTUtil;
@@ -27,14 +28,14 @@ public class AdminUserController {
     }
     // Create a new user
     @PostMapping("/create")
-    @PreAuthorize("hasRole(T(UserRole).TEACHER)")
-    public User createUser(
+    @PreAuthorize("hasRole('TEACHER')")
+    public UserDTO createUser(
             @RequestHeader("Authorization") String token,
-            @RequestBody User user) {
+            @RequestBody UserDTO userDTO) {
         try {
             authenticationService.authenticateToken(token);
-            userService.createUser(user);
-            return user;
+            userService.createUser(userDTO);
+            return userDTO;
         } catch(IllegalArgumentException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,ex.getMessage());
         }
@@ -42,8 +43,8 @@ public class AdminUserController {
 
     // Get all users (Teachers and Students)
     @GetMapping("/find")
-    @PreAuthorize("hasRole(T(UserRole).TEACHER)")
-    public List<User> getAllUsers(
+    @PreAuthorize("hasRole('TEACHER')")
+    public List<UserDTO> getAllUsers(
             @RequestHeader("Authorization") String token
     ) {
         try {
@@ -57,7 +58,7 @@ public class AdminUserController {
     // Get all users (Teachers and Students)
     @GetMapping("/find/{id}")
     @PreAuthorize("hasRole(T(UserRole).TEACHER)")
-    public User getUser(
+    public UserDTO getUser(
             @RequestHeader("Authorization") String token,
             @PathVariable Long id) {
         try {
