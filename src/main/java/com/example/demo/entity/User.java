@@ -41,7 +41,7 @@ public class User {
         return userId;
     }
 
-    public void setUserId(Long id) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
